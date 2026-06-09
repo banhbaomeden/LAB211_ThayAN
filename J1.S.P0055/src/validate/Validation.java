@@ -1,62 +1,69 @@
 package validate;
 
-public class Validation {
+import constant.Message;
 
+public final class Validation {
+
+    private Validation() {
+    }
+    
+    //Kiểm tra mã bác sĩ
     public static String inputCode(String input) {
-
+        //Kiểm tra rỗng
         if (input == null || input.trim().isEmpty()) {
-            System.out.println("Code cannot be empty.");
+            System.out.println(Message.CODE_EMPTY);
             return null;
         }
-
+        //Chỉ cho phép chữ, số và khoảng trắng
         if (!input.matches("[a-zA-Z0-9 ]+")) {
-            System.out.println("Code must not contain special characters.");
+            System.out.println(Message.CODE_INVALID);
             return null;
         }
 
         return input;
     }
-
+    //Kiểm tra name hoặc specialization
     public static String inputString(String input, String msg) {
-
+        //kiểm tra rỗng
         if (input == null || input.trim().isEmpty()) {
             System.out.println(msg);
             return null;
         }
-
+        //chỉ cho nhập chữ và khoảng trắng
         if (!input.matches("[a-zA-Z ]+")) {
-            System.out.println("Invalid value.");
+            System.out.println(Message.INVALID_VALUE);
             return null;
         }
 
         return input;
     }
-
-    public static Integer inputAvailability(String input) {
+    //Kiểm tra availability
+    public static int inputAvailability(String input)
+            throws Exception {
 
         try {
-
+            
             int n = Integer.parseInt(input);
-
+            //availability phải >= 0
             if (n < 0) {
-                System.out.println("Availability must be >= 0");
-                return null;
+                //ném exception nếu không hợp lệ
+                throw new Exception(Message.AVAILABILITY_INVALID);
             }
-
+            //Hợp lệ
             return n;
 
         } catch (NumberFormatException e) {
-            System.out.println("Availability must be number");
-            return null;
+            //Nếu nhập không phải số
+            throw new Exception(Message.AVAILABILITY_NUMBER);
         }
     }
-
+    //Kiểm tra lựa chọn menu
     public static int checkInputIntLimit(String input, int min, int max) {
 
         try {
 
             int result = Integer.parseInt(input);
-
+            //Kiểm tra trong khoảng min-max
             if (result >= min && result <= max) {
                 return result;
             }
@@ -64,7 +71,7 @@ public class Validation {
         } catch (NumberFormatException e) {
         }
 
-        System.out.println("Please enter number from " + min + " to " + max);
+        System.out.println(Message.INPUT_RANGE + min + " to " + max);
         return -1;
     }
 }
